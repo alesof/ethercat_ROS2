@@ -1,6 +1,6 @@
 # Ethercat ROS2
 
-## EtherLab installation
+## Auto install
 
 ### Easy setup
 To automatically install and configure you can use the bash scripts:
@@ -15,6 +15,7 @@ chmod +x ros2_driver_setup.sh
 sudo ./ros2_driver_setup.sh
 ```
 
+## Manual Install [EtherLab]
 
 ### Bios settings
 First thing is to check if SecureBoot is enabled. Access the BIOS settings and disable it. To check without accessing the BIOS:
@@ -92,7 +93,7 @@ Starting EtherCAT master 1.5.2  done
 0  0:0  PREOP  +  device_0_name
 ```
 
-## Building ethercat_driver_ros2
+## Manual Install [ethercat_driver_ros2]
 1. source ROS2 env: 
 ```
 source /opt/ros/humble/setup.bash
