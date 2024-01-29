@@ -14,6 +14,19 @@ sudo ./ethercat_setup.sh
 chmod +x ros2_driver_setup.sh
 ./ros2_driver_setup.sh
 ```
+3. Clone and build the zero_err_drive in the same workspace
+
+### Launch
+
+Open new terminal, source ws and run:
+```
+ros2 launch ethercat_zeroerr motor_drive.launch.py
+```
+
+Test with cli publish:
+```
+ros2 topic pub /trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory '{header: {stamp: {sec: 0, nanosec: 0}, frame_id: "base_link"}, joint_names: ["joint_1"], points: [{positions: [0.0], velocities: [10.0], accelerations: [10.0], time_from_start: {sec: 1, nanosec: 0}}]}'
+```
 
 ## Manual Install [EtherLab]
 
