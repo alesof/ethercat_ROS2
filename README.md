@@ -12,7 +12,7 @@ sudo ./ethercat_setup.sh
 2. ethercat_driver_ros2 install:
 ```
 chmod +x ros2_driver_setup.sh
-sudo ./ros2_driver_setup.sh
+./ros2_driver_setup.sh
 ```
 
 ## Manual Install [EtherLab]
