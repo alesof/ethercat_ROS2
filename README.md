@@ -2,6 +2,20 @@
 
 ## EtherLab installation
 
+### Easy setup
+To automatically install and configure you can use the bash scripts:
+1. EtherLab install:
+```
+chmod +x ethercat_setup.sh
+sudo ./ethercat_setup.sh
+```
+2. ethercat_driver_ros2 install:
+```
+chmod +x ros2_driver_setup.sh
+sudo ./ros2_driver_setup.sh
+```
+
+
 ### Bios settings
 First thing is to check if SecureBoot is enabled. Access the BIOS settings and disable it. To check without accessing the BIOS:
 ```
