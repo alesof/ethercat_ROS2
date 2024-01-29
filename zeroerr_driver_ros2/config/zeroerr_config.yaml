@@ -1,0 +1,48 @@
+# Configuration file for ZERO ERR drive
+vendor_id: 0x5A65726F
+product_id: 0x00029252
+assign_activate: 0x003c # DC Synch register
+auto_fault_reset: true  # true = automatic fault reset, false = fault reset on rising edge command interface "reset_fault"
+
+rpdo:  # RxPDO = receive PDO Mapping
+  - index: 0x1600
+    channels:
+      - {index: 0x607a, sub_index: 0, type: int32, command_interface: position, default: .nan}  # Target position !!!!!!!default: 0
+      - {index: 0x60fe, sub_index: 0, type: int32, default: 0}  # Digital Output Functionalities
+      - {index: 0x6040, sub_index: 0, type: uint16, default: 0}  # Control word
+
+tpdo:  # TxPDO = transmit PDO Mapping 
+  - index: 0x1A00
+    channels:
+      - {index: 0x6064, sub_index: 0, type: int32, state_interface: position}  # Position actual value
+      - {index: 0x60fd, sub_index: 0, type: int32}  # Digital Input Functionalities
+      - {index: 0x6041, sub_index: 0, type: uint16}  # Status word
+      - {index: 0x6061, sub_index: 0, type: uint16, default: 8}
+
+      
+sm:  # Sync Manager
+  - {index: 0, type: output, pdo: ~, watchdog: disable}
+  - {index: 1, type: input, pdo: ~, watchdog: disable}
+  - {index: 2, type: output, pdo: rpdo, watchdog: enable}
+  - {index: 3, type: input, pdo: tpdo, watchdog: disable}
+
+# <?xml version="1.0" ?>
+# <EtherCATInfo>
+#   <!-- Slave 0 -->
+#   <Vendor>
+#     <Id>1516597871</Id>
+#   </Vendor>
+#   <Descriptions>
+#     <Devices>
+#       <Device>
+#         <Type ProductCode="#x00029252" RevisionNo="#x00000001">ZeroErr Driver</Type>
+#         <Name><![CDATA[ZeroErr Driver]]></Name>
+#         <Sm Enable="1" StartAddress="#x1000" ControlByte="#x26" DefaultSize="128" />
+#         <Sm Enable="1" StartAddress="#x1080" ControlByte="#x22" DefaultSize="128" />
+#         <Sm Enable="1" StartAddress="#x1100" ControlByte="#x64" DefaultSize="0" />
+#         <Sm Enable="1" StartAddress="#x1400" ControlByte="#x20" DefaultSize="0" />
+#         
+#       </Device>
+#     </Devices>
+#   </Descriptions>
+# </EtherCATInfo>
