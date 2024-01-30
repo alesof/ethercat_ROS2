@@ -9,6 +9,9 @@ To automatically install and configure you can use the bash scripts:
 chmod +x ethercat_setup.sh
 sudo ./ethercat_setup.sh
 ```
+
+> **Note:** This install searches for the MAC address of your ethernet adapter, connect the ethernet cable before launching it, or refer to the manual install process.
+
 2. ethercat_driver_ros2 install:
 ```
 chmod +x ros2_driver_setup.sh
@@ -30,16 +33,23 @@ Starting EtherCAT master 1.5.2  done
 
 ### Launch
 
-Open new terminal and run:
+1. Open new terminal and run:
 ```
 source install/setup.bash
 ros2 launch ethercat_zeroerr motor_drive.launch.py
 ```
 
-Test with cli publish:
+2. Check motor position:
+```
+ros2 topic echo /joint_states
+```
+
+3. Test with cli publish:
 ```
 ros2 topic pub /trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory '{header: {stamp: {sec: 0, nanosec: 0}, frame_id: "base_link"}, joint_names: ["joint_1"], points: [{positions: [0.0], velocities: [10.0], accelerations: [10.0], time_from_start: {sec: 1, nanosec: 0}}]}'
 ```
+
+> **Note:** This directly publishes the joint position without any check, if it is too distant frome the current one, the motor will go in fault state.
 
 ## Manual Install [EtherLab]
 
