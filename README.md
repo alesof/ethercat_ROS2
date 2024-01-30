@@ -141,3 +141,9 @@ source install/setup.bash
 ### Debugging etherCAT
 This is a verbose on the start: `sudo strace -f -e trace=finit_module,init_module ethercatctl start`
 
+### Acknowledgments
+
+This is based on [ICubeRobotics](https://github.com/ICube-Robotics) guides and repositories.
+
+Thanks to [JensVanhooydonck](https://github.com/JensVanhooydonck) for the help [on the issue](https://github.com/ICube-Robotics/ethercat_driver_ros2/issues/87) on the mode of operation!
+
