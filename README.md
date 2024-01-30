@@ -14,12 +14,25 @@ sudo ./ethercat_setup.sh
 chmod +x ros2_driver_setup.sh
 ./ros2_driver_setup.sh
 ```
-3. Clone and build the zero_err_drive in the same workspace
+
+### Run EtherCAT master
+
+```
+sudo /etc/init.d/ethercat start
+ethercat slaves
+```
+
+The setup is successfull if terminal displays this:
+```
+Starting EtherCAT master 1.5.2  done
+0  0:0  PREOP  +  device_0_name
+```
 
 ### Launch
 
-Open new terminal, source ws and run:
+Open new terminal and run:
 ```
+source install/setup.bash
 ros2 launch ethercat_zeroerr motor_drive.launch.py
 ```
 
@@ -94,17 +107,6 @@ DEVICE_MODULES="generic"
 
 **[Info]:** To check what's the ethernet MAC address: open a new terminal and run: `ip addr`.
 
-## EtherCAT run
-```
-sudo /etc/init.d/ethercat start
-ethercat slaves
-```
-
-The setup is successfull if terminal displays this:
-```
-Starting EtherCAT master 1.5.2  done
-0  0:0  PREOP  +  device_0_name
-```
 
 ## Manual Install [ethercat_driver_ros2]
 1. source ROS2 env: 
@@ -128,3 +130,4 @@ source install/setup.bash
 
 ### Debugging etherCAT
 This is a verbose on the start: `sudo strace -f -e trace=finit_module,init_module ethercatctl start`
+
