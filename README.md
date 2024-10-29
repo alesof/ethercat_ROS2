@@ -49,7 +49,6 @@ ros2 topic echo /joint_states
 ros2 topic pub /trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory '{header: {stamp: {sec: 0, nanosec: 0}, frame_id: "base_link"}, joint_names: ["joint_1"], points: [{positions: [0.0], velocities: [10.0], accelerations: [10.0], time_from_start: {sec: 1, nanosec: 0}}]}'
 ```
 
-> **Note:** This directly publishes the joint position without any check, if it is too distant frome the current one, the motor will go in fault state.
 
 ## Manual Install [EtherLab]
 

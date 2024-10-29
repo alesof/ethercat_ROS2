@@ -28,8 +28,10 @@ trajectory_controller:
       - joint_1
     command_interfaces:
       - position
+      - velocity
     state_interfaces:
       - position
+      - velocity
 
 
 velocity_controller:
