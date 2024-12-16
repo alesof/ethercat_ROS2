@@ -1,4 +1,4 @@
-# Copyright 2023 ICube Laboratory, University of Strasbourg
+# Copyright 2024 Alessandro Sofia, Herobots
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration, PythonExpression
 from launch.actions import DeclareLaunchArgument
 
 from launch_ros.actions import Node
@@ -23,17 +23,25 @@ from launch.actions import TimerAction
 
 def generate_launch_description():
 
-    # Declare arguments
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
             'description_file',
-            default_value='motor_drive.config.xacro',
+            default_value='robot_drive.config.xacro',
             description='URDF/XACRO description file with the axis.',
         )
     )
 
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'num_drives',
+            default_value='3',
+            description='Number of drives.',
+        )
+    )
+
     description_file = LaunchConfiguration('description_file')
+    num_drives = LaunchConfiguration('num_drives')
 
     robot_description_content = Command(
         [
@@ -54,7 +62,7 @@ def generate_launch_description():
         [
             FindPackageShare("ethercat_zeroerr"),
             "config",
-            "controllers.yaml",
+            "robot_controllers.yaml",
         ]
     )
 
@@ -83,37 +91,28 @@ def generate_launch_description():
         arguments=["trajectory_controller", "-c", "/controller_manager"],
     )
 
-    delayed_trajectory_spawner = TimerAction(
-        period=(5.0),  # sec
-        actions=[trajectory_controller_spawner]
-    )
-
-    position_controller_spawner = Node(
+    velocity_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["position_controller", "-c", "/controller_manager"],
+        arguments=["velocity_controller", "-c", "/controller_manager"],
     )
 
-    # velocity_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["velocity_controller", "-c", "/controller_manager"],
-    # )
-
-    # effort_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["effort_controller", "-c", "/controller_manager"],
-    # )
+    delayed_trajectory_spawner = TimerAction(
+        period=PythonExpression(["5.0 * ", num_drives]),
+        actions=[trajectory_controller_spawner]
+    )
+    
+    delayed_velocity_spawner = TimerAction(
+        period=PythonExpression(["5.0 * ", num_drives]),
+        actions=[velocity_controller_spawner]
+    )
 
     nodes = [
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner,
-        delayed_trajectory_spawner,
-        #position_controller_spawner,
-        #velocity_controller_spawner,
-        # effort_controller_spawner,
+        delayed_trajectory_spawner
+        # delayed_velocity_spawner
     ]
 
     return LaunchDescription(

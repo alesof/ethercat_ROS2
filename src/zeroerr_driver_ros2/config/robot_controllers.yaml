@@ -21,10 +21,15 @@ position_controller:
   ros__parameters:
     joints:
       - joint_1
+      - joint_2
+      - joint_3
+      
 trajectory_controller:
   ros__parameters:
     joints:
       - joint_1
+      - joint_2
+      - joint_3
     command_interfaces:
       - position
       - velocity
@@ -37,8 +42,12 @@ velocity_controller:
   ros__parameters:
     joints:
       - joint_1
+      - joint_2
+      - joint_3
 
 effort_controller:
   ros__parameters:
     joints:
       - joint_1
+      - joint_2
+      - joint_3

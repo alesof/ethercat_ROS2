@@ -31,7 +31,7 @@ Starting EtherCAT master 1.5.2  done
 0  0:0  PREOP  +  device_0_name
 ```
 
-### Launch
+### Launch Single Drive Example
 
 1. Open new terminal and run:
 ```
@@ -47,6 +47,24 @@ ros2 topic echo /joint_states
 3. Test with cli publish:
 ```
 ros2 topic pub --once /trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory '{header: {stamp: {sec: 0, nanosec: 0}, frame_id: "base_link"}, joint_names: ["joint_1"], points: [{positions: [0.0], velocities: [10.0], accelerations: [10.0], time_from_start: {sec: 1, nanosec: 0}}]}'
+```
+
+### Robot Multi Drive Example
+
+1. Open new terminal and run:
+```
+source install/setup.bash
+ros2 launch ethercat_zeroerr robot_drive.launch.py
+```
+
+2. Check motor position:
+```
+ros2 topic echo /joint_states
+```
+
+3. Multiple joints with cli:
+```
+ros2 topic pub --once /trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory '{header: {stamp: {sec: 0, nanosec: 0}, frame_id: "base_link"}, joint_names: ["joint_1","joint_2","joint_3"], points: [{positions: [0.0, 0.0, 0.0], velocities: [10.0, 10.0, 10.0], accelerations: [10.0, 10.0, 10.0], time_from_start: {sec: 1, nanosec: 0}}]}'
 ```
 
 
@@ -146,3 +164,15 @@ This is based on [ICubeRobotics](https://github.com/ICube-Robotics) guides and r
 
 Thanks to [JensVanhooydonck](https://github.com/JensVanhooydonck) for the help [on the issue](https://github.com/ICube-Robotics/ethercat_driver_ros2/issues/87) on the mode of operation!
 
+## Known Issues
+This section contains issues and solutions that have been encountered during the use and development.
+
+### IOCTL Version Magic Number is Differing
+Example of the error message is: `Failed to obtain number of masters: ioctl() version magic is differing: /dev/EtherCAT0: 33, ethercat tool: 32`
+
+This issue is due to a different version of the command line tool and the ethercat manager. The problem I had was that the make install was installing in usr/bin and a previous version was installed in usr/local/bin. Thus the new tool compiled version was never called! If you have a similar problem, you can check it by running the ethercat tool from the build. For instance navigate using `cd` to ethercat build tool folder and run the tool using for example `./ethercat slave`. By simpling deleting the usr/local/bin old version the new installed version should be available.
+
+Other people stumbling on the same error with different problem/solutions: https://github.com/ICube-Robotics/ethercat_driver_ros2/issues/134
+
+### Drives start with error code
+This was due to the drive not getting to OP state in time before first command given from ros controller. Simply adding a delay in the launch file fixed the issue.
